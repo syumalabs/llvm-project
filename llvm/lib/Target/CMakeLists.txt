@@ -33,7 +33,12 @@ endif()
 
 foreach(t ${LLVM_TARGETS_TO_BUILD})
   message(STATUS "Targeting ${t}")
-  add_subdirectory(${t})
+  string(TOUPPER "${t}" t_upper)
+  if(LLVM_EXTERNAL_${t_upper}_SOURCE_DIR AND EXISTS "${LLVM_EXTERNAL_${t_upper}_SOURCE_DIR}")
+    add_subdirectory("${LLVM_EXTERNAL_${t_upper}_SOURCE_DIR}" "${t}")
+  else()
+    add_subdirectory(${t})
+  endif()
 endforeach()
 
 # Currently we do not allow libraries from lib to reference targets directly.
